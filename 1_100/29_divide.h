@@ -12,34 +12,20 @@
 class Solution {
 public:
     int divide(int dividend, int divisor) {
-        /*long dend = dividend, sor = divisor;
-        long quotient = 0;
-        bool positive = (dend>0 && sor>0) || (dend<0 && sor<0);
-        dend = dend < 0 ? -dend : dend;
-        sor = sor < 0 ? -sor : sor;
-        
-        while(dend>=sor){
-            if(++quotient > INT_MAX) return INT_MAX;
-            dend -= sor;
-        }
-        
-        if(quotient > INT_MAX) return INT_MAX;
-        
-        return positive ? quotient : -quotient;
-         */
-        long long a = dividend > 0 ? dividend : -(long long)dividend;
-        long long b = divisor > 0 ? divisor : -(long long) divisor;
-        
-        long long result = 0;
-        while(a >= b){
-            long long c = b;
-            for(int i=0; a >= c; ++i, c <<= 1){
-                a -= c;
-                result += 1 << i;
+        if (divisor == 0 || (dividend == INT_MIN && divisor == -1)) return INT_MAX;
+        long long m = abs((long long)dividend), n = abs((long long)divisor), res = 0;
+        int sign = ((dividend < 0) ^ (divisor < 0)) ? -1 : 1;
+        if (n == 1) return sign == 1 ? m : -m;
+        while (m >= n) {
+            long long t = n, p = 1;
+            while (m >= (t << 1)) {
+                t <<= 1;
+                p <<= 1;
             }
+            res += p;
+            m -= t;
         }
-        
-        return ((dividend^divisor) >> 31) ? (-result) : (result);
+        return sign == 1 ? res : -res;
     }
 };
 
